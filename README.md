@@ -1,2 +1,1 @@
-# rixarchives
-Website.
+[Website](https://rixarchives.netlify.app/)
