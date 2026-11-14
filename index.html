@@ -44,32 +44,11 @@ body {
     width: 100%;
 }
 
-.sidebar-left {
-    width: 280px;
-    background-color: var(--bg-secondary);
-    border-right: 1px solid var(--border-color);
-    padding: 24px 16px;
-    position: sticky;
-    top: 0;
-    height: 100vh;
-    overflow-y: auto;
-    flex-shrink: 0;
-}
-
 .main-content {
     flex: 1;
     max-width: 860px;
     padding: 40px 48px;
     margin: 0 auto;
-}
-
-.sidebar-title {
-    font-size: 12px;
-    font-weight: 700;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    letter-spacing: 0.5px;
-    margin-bottom: 16px;
 }
 
 .repo-list {
@@ -127,16 +106,12 @@ p {
 
 hr {
     height: 0.25em;
-    margin: 32px 0;
+    margin: 24px 0;
     background-color: var(--border-color);
     border: 0;
 }
 
 @media (max-width: 768px) {
-    .sidebar-left {
-        display: none;
-    }
-
     .main-content {
         padding: 20px 16px;
     }
@@ -147,42 +122,63 @@ hr {
 <body>
 
 <div class="app-container">
+
     <main class="main-content">
 
         <h1>RixArchives [WIP]</h1>
 
         <p class="muted">
-        A Website, for my stuff!
+            A Website, for my stuff!
         </p>
+
         <p class="muted">
-        https://github.com/ajsea1sy/rixarchives
+            https://github.com/ajsea1sy/rixarchives
         </p>
 
         <section>
             <h2>Sections</h2>
 
+            <!-- Main navigation: 5 buttons -->
             <ul class="repo-list">
                 <li>
                     <a class="repo-item" href="503.html">
                         ???
                     </a>
                 </li>
+
                 <li>
                     <a class="repo-item" href="503.html">
                         ???
                     </a>
                 </li>
+
+                <li>
+                    <a class="repo-item" href="503.html">
+                        ???
+                    </a>
+                </li>
+
+                <li>
+                    <a class="repo-item" href="503.html">
+                        ???
+                    </a>
+                </li>
+
                 <li>
                     <a class="repo-item" href="docs.html">
                         > Docs
                     </a>
                 </li>
+            </ul>
+            <hr>
+            <ul class="repo-list">
                 <li>
                     <a class="repo-item" href="about.html">
                         > About
                     </a>
                 </li>
             </ul>
+
         </section>
 
         <hr>
