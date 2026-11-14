@@ -1,9 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Robin's Wheel and Tweaks Technical Investigation: RixArchives</title>
+
   <style>
     :root {
       --bg-primary: #0d1117;
@@ -203,6 +205,25 @@
       font-size: 14px;
     }
 
+    /* Evidence download button */
+    .download-button {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 5px 12px;
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      text-decoration: none;
+      font-size: 14px;
+      transition: 0.15s ease;
+    }
+
+    .download-button:hover {
+      background: var(--bg-tertiary);
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
+    }
+
     .table-container {
       overflow-x: auto;
       margin-bottom: 24px;
@@ -250,19 +271,36 @@
       .sidebar-left {
         display: none;
       }
+
       .main-content {
         padding: 20px 16px;
       }
     }
   </style>
 </head>
+
 <body>
+
+  <div class="app-container">
+
     <main class="main-content">
-      
+
       <h1>Robin's Wheel and Tweaks Technical Investigation</h1>
 
       <blockquote>
-        <strong>Disclaimer:</strong> This document does not condone witch-hunting or harassment of individuals involved.
+        <strong>Disclaimer:</strong>
+        This document does not condone witch-hunting or harassment of individuals involved.
+      </blockquote>
+
+      <blockquote>
+        <strong>Notice:</strong>
+        Evidence files are not attached to this page nor directly viewable from it.
+
+        <br>
+
+        <a class="download-button" href="evidence_files.zip" download>
+          Download
+        </a>
       </blockquote>
 
       <section id="overview">
@@ -295,6 +333,7 @@
 
       <section id="asset-theft">
         <h2>2. Unauthorized Use, Asset Theft (+ Testimonies)</h2>
+
         <div class="table-container">
           <table>
             <thead>
@@ -359,6 +398,7 @@
         </div>
 
         <h3>2.1 Supporting Chat Records</h3>
+
         <p><strong>OOT Style Epona permission inquiry:</strong></p>
         <blockquote>
           <strong>Fimmel:</strong> "Hello, did you ever gave ‘robinthesoundsmith’ permission to include your ‘OOT Style Epona mod into they's mod called ‘Secondary inventory wheel’?"<br>
@@ -381,7 +421,7 @@
 
       <hr>
 
-            <section id="loopholes">
+      <section id="loopholes">
         <h2>3. Exploitation of Technical & Attribution Loopholes</h2>
         <ul>
           <li><strong>Disregard for Restrictions:</strong> Continued asset extraction and public distribution despite an official hardhold placed on the material by GameBanana staff.</li>
