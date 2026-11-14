@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Robin's Wheel and Tweaks Technical Investigation: RixArchives</title>
+  <style>
+    :root {
+      --bg-primary: #0d1117;
+      --bg-secondary: #161b22;
+      --bg-tertiary: #21262d;
+      --border-color: #30363d;
+      --text-main: #c9d1d9;
+      --text-heading: #f0f6fc;
+      --text-muted: #8b949e;
+      --accent-blue: #58a6ff;
+      --accent-red: #f85149;
+      --accent-yellow: #d29922;
+      --code-bg: rgba(110, 118, 129, 0.15);
+      --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-main);
+      font-family: var(--font-stack);
+      font-size: 16px;
+      line-height: 1.6;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .app-container {
+      display: flex;
+      width: 100%;
+    }
+
+    .sidebar-left {
+      width: 280px;
+      background-color: var(--bg-secondary);
+      border-right: 1px solid var(--border-color);
+      padding: 24px 16px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      flex-shrink: 0;
+    }
+
+    .sidebar-right {
+      width: 240px;
+      padding: 30px 20px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      flex-shrink: 0;
+    }
+
+    .main-content {
+      flex: 1;
+      max-width: 860px;
+      padding: 40px 48px;
+      margin: 0 auto;
+    }
+
+    .sidebar-title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
+    }
+
+    .repo-list {
+      list-style: none;
+    }
+
+    .repo-list li {
+      margin-bottom: 10px;
+    }
+
+    .repo-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      padding: 6px 10px;
+      border-radius: 6px;
+    }
+
+    .repo-item .icon {
+      font-size: 14px;
+    }
+
+    .repo-item code {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--accent-blue);
+      background: transparent;
+      padding: 0;
+      border-radius: 0;
+      word-break: break-all;
+    }
+
+    .toc-list {
+      list-style: none;
+    }
+
+    .toc-list li {
+      margin-bottom: 8px;
+    }
+
+    .toc-list a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.15s ease;
+    }
+
+    .toc-list a:hover {
+      color: var(--accent-blue);
+    }
+
+    .toc-list .sub-item {
+      padding-left: 14px;
+      font-size: 13px;
+    }
+
+    h1, h2, h3 {
+      color: var(--text-heading);
+      font-weight: 600;
+      line-height: 1.25;
+    }
+
+    h1 {
+      font-size: 2rem;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 24px;
+    }
+
+    h2 {
+      font-size: 1.4rem;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border-color);
+      margin-top: 36px;
+      margin-bottom: 16px;
+    }
+
+    h3 {
+      font-size: 1.1rem;
+      margin-top: 24px;
+      margin-bottom: 12px;
+    }
+
+    p {
+      margin-bottom: 16px;
+    }
+
+    ul {
+      padding-left: 24px;
+      margin-bottom: 16px;
+    }
+
+    li {
+      margin-bottom: 6px;
+    }
+
+    hr {
+      height: 0.25em;
+      padding: 0;
+      margin: 32px 0;
+      background-color: var(--border-color);
+      border: 0;
+    }
+
+    code {
+      font-family: var(--font-mono);
+      font-size: 85%;
+      background-color: var(--code-bg);
+      padding: 0.2em 0.4em;
+      border-radius: 6px;
+      color: var(--text-heading);
+    }
+
+    blockquote {
+      padding: 12px 16px;
+      color: var(--text-muted);
+      border-left: 0.25em solid var(--accent-yellow);
+      background-color: var(--bg-secondary);
+      border-radius: 0 6px 6px 0;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+
+    .table-container {
+      overflow-x: auto;
+      margin-bottom: 24px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th, td {
+      padding: 10px 14px;
+      border: 1px solid var(--border-color);
+      text-align: left;
+    }
+
+    th {
+      background-color: var(--bg-secondary);
+      color: var(--text-heading);
+      font-weight: 600;
+    }
+
+    tr:nth-child(even) {
+      background-color: var(--bg-secondary);
+    }
+
+    .badge-danger {
+      background-color: rgba(248, 81, 73, 0.15);
+      color: var(--accent-red);
+      border: 1px solid rgba(248, 81, 73, 0.4);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-family: var(--font-mono);
+    }
+
+    @media (max-width: 1024px) {
+      .sidebar-right {
+        display: none;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar-left {
+        display: none;
+      }
+      .main-content {
+        padding: 20px 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+    <main class="main-content">
+      
+      <h1>Robin's Wheel and Tweaks Technical Investigation</h1>
+
+      <blockquote>
+        <strong>Disclaimer:</strong> This document does not condone witch-hunting or harassment of individuals involved.
+      </blockquote>
+
+      <section id="overview">
+        <h2>Overview</h2>
+        <ul>
+          <li><strong>Project:</strong> Robin's Wheel and Tweaks (a.k.a: Secondary Inventory Wheel)</li>
+          <li><strong>Individual:</strong> RobinTheSoundSmith (a.k.a: RobinSoundSmith)</li>
+          <li><strong>Summary:</strong> Systemic copyright infringement, unauthorized asset theft, ongoing community harassment, platform policy violations (hate speech/slurs), and active circumvention of modding holds/bans.</li>
+        </ul>
+      </section>
+
+      <hr>
+
+      <section id="conduct">
+        <h2>1. Conduct, Policy Violations</h2>
+
+        <h3 id="harassment">1.1 Community Harassment & Disruptive Conduct</h3>
+        <ul>
+          <li><strong>Hostility Toward Dusklight Staff & Developers:</strong> Aggressive and retaliatory behavior directed toward Dusklight staff, contributors, and external modders when confronted about policy adherence.</li>
+          <li><strong>Disruptive Prompting and Spamming:</strong> Persistent spamming of community channels and developers with low-effort or automated queries (e.g., repeating loops like <code>"What do I tell the AI to do?"</code>), ignoring explicit directives to desist.</li>
+        </ul>
+
+        <h3 id="hate-speech">1.2 Severe Policy Violations (Hate Speech)</h3>
+        <ul>
+          <li><strong>Documented Violations:</strong> Repeated use of obfuscated racial slurs (<code>"Nga"</code>), transphobic remarks, targeted harassment, and hostile political rhetoric across community spaces.</li>
+        </ul>
+      </section>
+
+      <hr>
+
+      <section id="asset-theft">
+        <h2>2. Unauthorized Use, Asset Theft (+ Testimonies)</h2>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Project</th>
+                <th>Creator</th>
+                <th>Subject</th>
+                <th>Assessment</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Geo's Hyrulean Tools and Expansion</strong></td>
+                <td>Geotypical (Geo)</td>
+                <td>"Ice Leaf" implementations, Midna Companion</td>
+                <td>Functionality used in custom shield-surfing mechanics, and unreleased Midna Companion.</td>
+              </tr>
+              <tr>
+                <td><strong>Twilit Essentials [TE]</strong></td>
+                <td>Fimmel (F1mmel)</td>
+                <td>Stamina System, Sprint Naming (implied,) Bullet Time/Flurry Rush</td>
+                <td>Core stamina code structure extracted and repurposed. According to Fimmel; Sprint names were "ripped from TE.", TE has Bullet Time and Flurry Rush, as does Dawnlight. The statement specifically concerns names.</td>
+              </tr>
+              <tr>
+                <td><strong>Crests of Courage [CoC]</strong></td>
+                <td>Remi (remiafterdark)</td>
+                <td>Full Mod Source Code</td>
+                <td>Unauthorized, malicious mirror/use of the complete source codebase as intent to exploit and remove restrictions to use on the official mods servers.</td>
+              </tr>
+              <tr>
+                <td><strong>Dawnlight</strong></td>
+                <td>BeZide</td>
+                <td>Revali's Gale, Glider, Z-Item slot, Cinematic Camera, Bullet Time, Flurry Rush</td>
+                <td>Unauthorized extraction of Revali's Gale, Glider mechanics, Z-Item slot system, Cinematic Camera, Bullet Time, Flurry Rush.</td>
+              </tr>
+              <tr>
+                <td><strong>OOT Style Epona</strong></td>
+                <td>HugAMuffin</td>
+                <td>Model taken and added into the mod</td>
+                <td>Fimmel directly asked HugAMuffin whether RobinTheSoundSmith had permission to include the mod. HugAMuffin replied, "Nope." This is direct testimony denying permission for the inclusion described.</td>
+              </tr>
+              <tr>
+                <td><strong>Nightwalker Epona</strong></td>
+                <td>i12bp8</td>
+                <td>Model taken and added into the mod</td>
+                <td>Fimmel directly asked i12bp8 whether RobinTheSoundSmith had permission to include the mod. i12bp8 replied, "nope haha don't know about that person or mod." This is another direct testimony denying permission for the inclusion described.</td>
+              </tr>
+              <tr>
+                <td><strong>Fairy Companion</strong></td>
+                <td>AgustinFuac</td>
+                <td>Model and functionality ripped</td>
+                <td>Omitted. Fimmel's testimony seconds the feature.</td>
+              </tr>
+              <tr>
+                <td><em>N/A</em></td>
+                <td>SkilarBabcock</td>
+                <td>Custom Character Models</td>
+                <td>Unauthorized integration of models: <em>Hero of the Sky</em>, <em>Hero of Time</em>, <em>Hyrule Warriors</em>, <em>Ordon Warrior</em>, and <em>Hero of the Wild</em>. The report also records a denial of ever interacting with SkilarBabcock despite direct warnings.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>2.1 Supporting Chat Records</h3>
+        <p><strong>OOT Style Epona permission inquiry:</strong></p>
+        <blockquote>
+          <strong>Fimmel:</strong> "Hello, did you ever gave ‘robinthesoundsmith’ permission to include your ‘OOT Style Epona mod into they's mod called ‘Secondary inventory wheel’?"<br>
+          <strong>HugAMuffin:</strong> "Nope"
+        </blockquote>
+
+        <p><strong>Nightwalker Epona permission inquiry:</strong></p>
+        <blockquote>
+          <strong>Fimmel:</strong> "Hello, did you ever gave ‘robinthesoundsmith’ permission to include your ‘Nightwalker Epona’ mod into they's mod called ‘Secondary inventory wheel’?"
+          <br>
+          <strong>i12bp8:</strong> "nope haha don't know about that person or mod"
+        </blockquote>
+
+        <p><strong>Additional Attribs (Not accurate quotes):</strong></p>
+        <blockquote>
+          <strong>Fimmel -</strong> Sprint names ripped from TE<br>
+          <strong>Fimmel -</strong> Bullet time + Flurry rush - TE and Dawnlight has them as well<br>
+        </blockquote>
+      </section>
+
+      <hr>
+
+            <section id="loopholes">
+        <h2>3. Exploitation of Technical & Attribution Loopholes</h2>
+        <ul>
+          <li><strong>Disregard for Restrictions:</strong> Continued asset extraction and public distribution despite an official hardhold placed on the material by GameBanana staff.</li>
+          <li><strong>Obfuscation Tactic (TE & Dawnlight):</strong>
+            <ul>
+              <li>The author claimed the code was derived from <em>Dawnlight</em>, despite a namespace in the mod named <code>twilit_essentials</code>.</li>
+              <li>Technical evaluation confirms that assets were stolen directly from both <em>TE</em> and <em>Dawnlight</em>, with stolen <em>TE</em> features grouped under the <em>Dawnlight</em> label to obscure original attribution and bypass detection.</li>
+            </ul>
+          </li>
+        </ul>
+      </section>
+
+    </main>
+
+  </div>
+
+</body>
+</html>
