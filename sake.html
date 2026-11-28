@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sake SMP - Technical Investigation (RixArchives)</title>
+  <style>
+    :root {
+      --bg-primary: #0d1117;
+      --bg-secondary: #161b22;
+      --bg-tertiary: #21262d;
+      --border-color: #30363d;
+      --text-main: #c9d1d9;
+      --text-heading: #f0f6fc;
+      --text-muted: #8b949e;
+      --accent-blue: #58a6ff;
+      --accent-red: #f85149;
+      --accent-yellow: #d29922;
+      --code-bg: rgba(110, 118, 129, 0.15);
+      --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg-primary); color: var(--text-main);
+      font-family: var(--font-stack); font-size: 16px; line-height: 1.6;
+    }
+    .main-content { max-width: 860px; padding: 40px 48px; margin: 0 auto; }
+    h1, h2, h3 { color: var(--text-heading); font-weight: 600; line-height: 1.25; }
+    h1 { font-size: 2rem; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); margin-bottom: 24px; }
+    h2 { font-size: 1.4rem; padding-bottom: 8px; border-bottom: 1px solid var(--border-color); margin-top: 36px; margin-bottom: 16px; }
+    h3 { font-size: 1.1rem; margin-top: 24px; margin-bottom: 12px; }
+    p { margin-bottom: 16px; }
+    ul { padding-left: 24px; margin-bottom: 16px; }
+    li { margin-bottom: 6px; }
+    hr { height: 4px; margin: 32px 0; background: var(--border-color); border: 0; }
+    code { font-family: var(--font-mono); font-size: 85%; background: var(--code-bg); padding: .2em .4em; border-radius: 6px; color: var(--text-heading); }
+    blockquote {
+      padding: 12px 16px; color: var(--text-muted); border-left: 4px solid var(--accent-yellow);
+      background: var(--bg-secondary); border-radius: 0 6px 6px 0; margin-bottom: 20px; font-size: 14px;
+    }
+    .status-banner {
+      padding: 12px 16px; color: var(--text-muted); background: var(--bg-secondary);
+      border-left: 4px solid var(--accent-blue); border-radius: 0 6px 6px 0;
+      margin-bottom: 20px; font-size: 14px;
+    }
+    .status-banner strong { color: var(--text-heading); }
+    .table-container { overflow-x: auto; margin-bottom: 24px; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { padding: 10px 14px; border: 1px solid var(--border-color); text-align: left; vertical-align: top; }
+    th { background: var(--bg-secondary); color: var(--text-heading); font-weight: 600; }
+    tr:nth-child(even) { background: var(--bg-secondary); }
+    .tag { display: inline-block; padding: 2px 7px; border: 1px solid var(--border-color); border-radius: 4px; font-size: 12px; margin: 2px 3px 2px 0; color: var(--text-muted); }
+    .muted { color: var(--text-muted); font-size: 14px; }
+    @media (max-width: 768px) { .main-content { padding: 20px 16px; } }
+  </style>
+</head>
+<body>
+<main class="main-content">
+
+  <div class="status-banner">
+    <strong>[Complete!] Status:</strong>
+    The server has been willingly taken down and rebranded as "JJG SMP," but the rebrand was taken down shortly after. Cheese King has gone under a new alias: "Beno."
+  </div>
+
+  <h1>Sake SMP - Technical Investigation</h1>
+
+  <blockquote>
+    <strong>Disclaimer:</strong>
+    This document does not condone witch-hunting or harassment of individuals involved.
+  </blockquote>
+<section id="overview">
+    <h2>Overview</h2>
+    <ul>
+      <li><strong>Community:</strong> Sake SMP/JJG SMP</li>
+      <li><strong>Subject:</strong> Reported conduct by server ownership and administrative members, and the handling of community safety and moderation.</li>
+      <li><strong>Summary:</strong> Concerns regarding misuse of moderation authority, inconsistent enforcement of an 18+ server restriction with the presence of a minor in the community, mass removal of members, subsequent rebranding, and the response to criticism.</li>
+    </ul>
+  </section>
+
+  <hr>
+
+  <section id="involvement">
+    <h2>Involvement Roles</h2>
+    <p class="muted">Names below are online aliases. Role descriptions reflect the author's account of each person's involvement and are not legal or identity information.</p>
+    <div class="table-container">
+      <table>
+        <thead><tr><th>Alias</th><th>Assessment</th></tr></thead>
+        <tbody>
+          <tr>
+
+            <td>Rix</td>
+            <td><span class="tag">Investigator (Lead)</span><span class="tag">Director (former)</span><span class="tag">Victim</span><br>Former director at Sake SMP; compiler and lead of the investigation.</td>
+          </tr>
+          <tr>
+
+            <td>Macman64</td>
+            <td><span class="tag">Investigator</span><span class="tag">Player</span><br>Former Sake SMP player; assisted with the investigation.</td>
+          </tr>
+          <tr>
+
+            <td>Dragan</td>
+            <td><span class="tag">Investigator</span><span class="tag">Player</span><br>Former Sake SMP player; assisted with the investigation.</td>
+          </tr>
+          <tr>
+            <td>M1</td>
+            <td><span class="tag">Server Owner (Secondary)</span><br>Not directly involved, but responded to the situation with a perceived lack of concern.</td>
+          </tr>
+          <tr>
+            <td>BNE</td>
+            <td><span class="tag"> Player</span><span class="tag">Victim</span><br>Minor who was exposed to an environment represented as 18+.</td>
+          </tr>
+          <tr>
+            <td>Cheese King (also referred to as Cheese Lord and Beno)</td>
+            <td><span class="tag">Server Owner</span><br>Owner of Sake SMP.</td>
+          </tr>
+          <tr>
+            <td>Fawstt</td>
+            <td><span class="tag">Administrator</span><span class="tag">Presented Role Name: God</span><br>Higher-ranking member of the Sake SMP administration.</td>
+          </tr>
+          <tr>
+            <td>OlegSage</td>
+            <td><span class="tag">Administrator</span><span class="tag">Presented Role Name: major cutie</span><br>Higher-ranking member of the Sake SMP administration.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <hr>
+
+  <section id="chapter1">
+    <h2>1. Abuse of Power and the "Role Hierarchy"</h2>
+    <p>The use of moderation tools under the framing of jokes as a major point of conflict.</p>
+    <ul>
+      <li><strong>Dispute over administrative roleplay:</strong> Rix says she raised concerns about Fawstt roleplaying as a "god" and  using the authority associated with that role inappropriately.</li>
+      <li><strong>Reported kicks of Macman64:</strong> Macman64 was removed from the server twice and that, in assessment, neither removal had a valid justification.</li>
+      <li><strong>"Just a joke" explanation:</strong> Using a formal moderation action and later describing it as a joke creates uncertainty about whether moderation decisions are being applied consistently.</li>
+    </ul>
+</section>
+
+  <hr>
+
+  <section id="chapter2">
+    <h2>2. Reported Hypocrisy Regarding Server Rules and Safety</h2>
+    <ul>
+      <li><strong>Inconsistent age restriction:</strong> The author says the server was explicitly presented as an 18+ space, but that a minor was knowingly admitted afterward.</li>
+      <li><strong>Reportedly enthusiastic admission:</strong> The author characterizes the response to the minor's admission as enthusiastic, which they believe conflicts with the server's stated age restriction.</li>
+      <li><strong>Community safety concerns:</strong> The author argues that selectively applying an age restriction undermines the credibility of the server's stated safety expectations.</li>
+      <li><strong>Response to objections:</strong> The author says criticism was characterized as preventing others from “messing around,” whereas they describe their own actions as an attempt to protect minors.</li>
+    </ul>
+
+    <h3>2.1 Additional Age-Restriction Concern</h3>
+    <p>Fawstt admitted to being under 18 while holding an administrative position in a server represented as 18+.</p>
+</section>
+
+  <hr>
+
+  <section id="chapter3">
+    <h2>3. Mass Kicks, Rebranding, and Accountability Concerns</h2>
+    <p>Rather than publicly addressing the concerns raised, the administration took actions that effectively restarted the community under a different identity.</p>
+    <ul>
+      <li><strong>Mass removal of members:</strong> A large portion of the player base was kicked from the server.</li>
+      <li><strong>Server rebranding:</strong> The server was subsequently rebranded and presented as though the earlier dispute had not occurred.</li>
+      <li><strong>Response to criticism:</strong> People who raised or revisited the issue were insulted and punished.</li>
+      <li><strong>Accountability concern:</strong> The combination of mass removals, rebranding, and limited public explanation as an attempt to avoid addressing the original concerns.</li>
+    </ul>
+</section>
+
+  <hr>
+
+  <section id="chapter4">
+    <h2>Lack of Sensible Leadership</h2>
+    <p>The author considers the administration's handling of disagreement and community expectations to show a lack of consistent leadership.</p>
+    <ul>
+      <li><strong>Handling disagreement:</strong> The author says administrators showed little willingness to accommodate members who did not share their style of humor.</li>
+      <li><strong>Following stated guidelines:</strong> The author argues that administrators should be expected to follow the same rules and standards they set for the community.</li>
+      <li><strong>Administrative responsibility:</strong> The author believes the people managing the server should have been capable of recognizing the consequences of inconsistent moderation and unclear safety standards.</li>
+    </ul>
+  </section>
+
+  <hr>
+
+  <section id="conclusion">
+    <h2>Bottom Line</h2>
+    <p>Operating a Minecraft community carries responsibilities to apply rules consistently, use moderation tools appropriately, communicate decisions clearly, and take stated age and safety restrictions seriously.</p>
+    <p class="muted">"If you are running an entire Minecraft community, you have a responsibility to be sensible, consistent, and fair. You cannot just alienate community members, compromise safety guidelines, mass-kick your player base, and abuse admin tools just because someone doesn't resonate with your jokes." - Rix</p>
+</section>
+
+</main>
+</body>
+</html>
